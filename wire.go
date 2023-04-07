@@ -5,10 +5,10 @@ package main
 
 import (
 	"github.com/google/wire"
-	"go-fiber-demo/routes"
+	"go-fiber-demo/controllers"
 )
 
-func InitializeApiRoutes() (routes.ApiRoutes, error) {
-	wire.Build(routes.ApiRoutesSet)
-	return routes.ApiRoutes{}, nil
+func InitializeBaseController() (controllers.BaseController, error) {
+	wire.Build(controllers.BaseControllerSet)
+	return controllers.BaseController{}, nil
 }

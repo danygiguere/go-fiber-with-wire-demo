@@ -2,21 +2,23 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/wire"
+	"go-fiber-demo/controllers"
 )
 
 type ApiRoutes struct {
-	route fiber.Router
+	route          fiber.Router
+	baseController controllers.BaseController
 }
 
-func ProvideRoutes(route fiber.Router) ApiRoutes {
-	return ApiRoutes{route: route}
+func NewApiRoutes(route fiber.Router, baseController controllers.BaseController) ApiRoutes {
+	return ApiRoutes{route: route, baseController: baseController}
 }
-
-var ApiRoutesSet = wire.NewSet(ProvideRoutes)
 
 func (apiRoutes ApiRoutes) Load() {
-	apiRoutes.route.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, 2023 World!")
-	})
+
+	demoController := controllers.NewDemoController(apiRoutes.baseController)
+	api := apiRoutes.route
+	api.Get("/demo", demoController.Index)
+	api.Get("/demo/i18n", demoController.I18nHelloWorld)
+	api.Get("/demo/i18n/:name", demoController.I18nHelloName)
 }
